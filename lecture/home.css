@@ -1,0 +1,33 @@
+/* ================================================
+   SPORTSBLUE - Portal Berita Olahraga Terpercaya
+   styles.css - Custom styles (Tailwind via CDN)
+   ================================================ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@600;700&display=swap');
+
+/* Base Font */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Oswald font utility class */
+.font-oswald {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Smooth page/theme transition animation */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
