@@ -4,596 +4,954 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPORTSBLUE - Portal Berita Olahraga Terpercaya</title>
+    <link rel="stylesheet" href="home.css">
+    <style>
+        /* ===== DETAIL PAGE STYLES ===== */
 
-    <!-- Tailwind CSS untuk Desain Premium & Responsif -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f5ff',
-                            100: '#e0e9fe',
-                            500: '#0052cc', // Royal Blue khas
-                            600: '#0041a3',
-                            700: '#003180',
-                        }
-                    }
-                }
-            }
+        .detail-hero {
+            position: relative;
+            height: 22rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
         }
-    </script>
+        @media (min-width: 640px) { .detail-hero { height: 28rem; } }
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+        html.dark .detail-hero { border-color: #1e293b; }
 
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+        .detail-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .detail-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(2,6,23,0.85), rgba(15,23,42,0.3), transparent);
+        }
+
+        .detail-hero-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: #0ea5e9;
+            color: #fff;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+        }
+
+        .detail-hero-label {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            color: #38bdf8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--brand-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            transition: gap 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .back-btn:hover { gap: 0.75rem; }
+        .back-btn svg { width: 1rem; height: 1rem; }
+
+        .detail-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        @media (min-width: 1024px) {
+            .detail-wrapper { grid-template-columns: 1fr 20rem; }
+        }
+
+        .detail-article {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        @media (min-width: 640px) { .detail-article { padding: 2.5rem; } }
+
+        html.dark .detail-article {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        .detail-tag {
+            display: inline-block;
+            font-size: 0.625rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #0ea5e9;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        @media (min-width: 640px) { .detail-title { font-size: 2rem; } }
+        html.dark .detail-title { color: #f1f5f9; }
+
+        .detail-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+        html.dark .detail-meta { border-color: #334155; }
+
+        .detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .detail-meta-item svg { width: 0.875rem; height: 0.875rem; }
+
+        .detail-lead {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-top: 1.25rem;
+            border-left: 3px solid var(--brand-500);
+            padding-left: 1rem;
+        }
+        html.dark .detail-lead { color: #e2e8f0; }
+
+        .detail-body {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.85;
+            margin-top: 1.25rem;
+        }
+        html.dark .detail-body { color: #cbd5e1; }
+        .detail-body p + p { margin-top: 1rem; }
+
+        .detail-body h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+        html.dark .detail-body h2 { color: #f1f5f9; }
+
+        .detail-body blockquote {
+            margin: 1.5rem 0;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--brand-500);
+            background-color: var(--brand-50);
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--brand-700);
+        }
+        html.dark .detail-body blockquote {
+            background-color: rgba(0,82,204,0.1);
+            color: #93c5fd;
+            border-color: #3b82f6;
+        }
+
+        .detail-inline-img {
+            width: 100%;
+            height: 16rem;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0 0;
+            box-shadow: var(--shadow-sm);
+        }
+        @media (min-width: 640px) { .detail-inline-img { height: 20rem; } }
+
+        .detail-img-caption {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 0.375rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        html.dark .detail-tags { border-color: #334155; }
+
+        .detail-tag-pill {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--brand-600);
+            background-color: var(--brand-50);
+            border: 1px solid var(--brand-100);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        html.dark .detail-tag-pill {
+            background-color: rgba(0,82,204,0.15);
+            border-color: rgba(0,82,204,0.3);
+            color: #93c5fd;
+        }
+
+        /* Sidebar detail */
+        .detail-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-widget {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        html.dark .sidebar-widget {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        .sidebar-widget-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--brand-500);
+            margin-bottom: 1rem;
+        }
+        html.dark .sidebar-widget-title { color: #f1f5f9; }
+
+        .related-card {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .related-card:last-child { border-bottom: none; padding-bottom: 0; }
+        html.dark .related-card { border-color: #334155; }
+        .related-card:hover { opacity: 0.75; }
+
+        .related-card img {
+            width: 4.5rem;
+            height: 3.5rem;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            flex-shrink: 0;
+        }
+
+        .related-card-tag {
+            font-size: 0.5625rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #0ea5e9;
+        }
+
+        .related-card-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.4;
+            margin-top: 0.125rem;
+        }
+        html.dark .related-card-title { color: #f1f5f9; }
+
+        .stats-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            background-color: var(--slate-50);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 0.5rem;
+        }
+        html.dark .stat-item {
+            background-color: #334155;
+            border-color: #475569;
+        }
+
+        .stat-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--brand-500);
+        }
+
+        .stat-label {
+            font-size: 0.5625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 0.125rem;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+<body>
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-40 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-8">
-                    <button onclick="switchPage('home')" class="flex items-center gap-2 font-oswald text-2xl font-bold text-brand-500 tracking-tight">
-                        <span class="bg-brand-500 text-white px-2 py-0.5 rounded">SPORTS</span>BLUE
-                    </button>
-                    <!-- Desktop Menu Navigasi (8 Halaman) -->
-                    <nav class="hidden lg:flex items-center gap-1">
-                        <button onclick="switchPage('home')" id="nav-home" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-brand-500 border-b-2 border-brand-500">Beranda</button>
-                        <button onclick="switchPage('bola')" id="nav-bola" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Bola</button>
-                        <button onclick="switchPage('basket')" id="nav-basket" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Basket</button>
-                        <button onclick="switchPage('badminton')" id="nav-badminton" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Badminton</button>
-                        <button onclick="switchPage('balap')" id="nav-balap" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Balap</button>
-                        <button onclick="switchPage('lainnya')" id="nav-lainnya" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Lainnya</button>
-                        <button onclick="switchPage('opini')" id="nav-opini" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Opini</button>
-                        <button onclick="switchPage('tentang')" id="nav-tentang" class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-brand-500 border-b-2 border-transparent hover:border-brand-500 transition-all">Tentang</button>
-                    </nav>
-                </div>
-
-                <!-- Right Utility: Search & Light/Dark Switch -->
-                <div class="flex items-center gap-3">
-                    <!-- Live Search Bar -->
-                    <div class="relative hidden sm:block">
-                        <input type="text" id="global-search" oninput="liveSearch()" placeholder="Cari berita..." class="w-48 lg:w-60 bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-white px-3.5 py-1.5 pl-9 rounded-full outline-none focus:ring-2 focus:ring-brand-500 border border-transparent dark:border-slate-700 transition-all">
-                        <i data-lucide="search" class="absolute left-3 top-2 w-3.5 h-3.5 text-slate-400"></i>
-                    </div>
-
-                    <!-- Theme Toggle Button -->
-                    <button onclick="toggleTheme()" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Ganti Tema">
-                        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
-                        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
-                    </button>
-
-                    <!-- Mobile Menu Hamburger -->
-                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        <i data-lucide="menu" id="menu-icon-open" class="w-5 h-5"></i>
-                        <i data-lucide="x" id="menu-icon-close" class="w-5 h-5 hidden"></i>
-                    </button>
-                </div>
+<!-- ===== HEADER / NAVBAR ===== -->
+<header class="site-header">
+    <div class="container">
+        <div class="header-inner">
+            <div class="nav-left">
+                <button onclick="switchPage('home')" class="logo-btn">
+                    <span class="logo-badge">SPORTS</span>BLUE
+                </button>
+                <nav class="desktop-nav">
+                    <button onclick="switchPage('home')"      id="nav-home"      class="nav-btn active">Beranda</button>
+                    <button onclick="switchPage('bola')"      id="nav-bola"      class="nav-btn">Bola</button>
+                    <button onclick="switchPage('basket')"    id="nav-basket"    class="nav-btn">Basket</button>
+                    <button onclick="switchPage('badminton')" id="nav-badminton" class="nav-btn">Badminton</button>
+                    <button onclick="switchPage('balap')"     id="nav-balap"     class="nav-btn">Balap</button>
+                    <button onclick="switchPage('lainnya')"   id="nav-lainnya"   class="nav-btn">Lainnya</button>
+                    <button onclick="switchPage('opini')"     id="nav-opini"     class="nav-btn">Opini</button>
+                    <button onclick="switchPage('tentang')"   id="nav-tentang"   class="nav-btn">Tentang</button>
+                </nav>
             </div>
-        </div>
 
-        <!-- Mobile Navigation Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 flex flex-col gap-2">
-            <div class="relative mb-2">
-                <input type="text" id="global-search-mobile" oninput="liveSearchMobile()" placeholder="Cari berita..." class="w-full bg-slate-100 dark:bg-slate-800 text-xs px-3.5 py-2 pl-9 rounded-md outline-none">
-                <i data-lucide="search" class="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-400"></i>
+            <div class="header-controls">
+                <button onclick="toggleTheme()" class="theme-btn" title="Ganti Tema">
+                    <svg id="theme-moon-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="theme-sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+
+                <button onclick="toggleMobileMenu()" class="hamburger-btn">
+                    <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
-            <button onclick="switchPage('home'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-brand-50 text-brand-500">Beranda</button>
-            <button onclick="switchPage('bola'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Sepak Bola</button>
-            <button onclick="switchPage('basket'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Basket</button>
-            <button onclick="switchPage('badminton'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Bulu Tangkis</button>
-            <button onclick="switchPage('balap'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Balap</button>
-            <button onclick="switchPage('lainnya'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Olahraga Lain</button>
-            <button onclick="switchPage('opini'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Opini</button>
-            <button onclick="switchPage('tentang'); toggleMobileMenu()" class="text-left py-2 px-3 rounded text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Tentang Kami</button>
-        </div>
-    </header>
-
-    <!-- MAIN CONTAINER BERITA -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        <!-- PENCARIAN LIVE OVERLAY (Muncul jika ada kata kunci pencarian) -->
-        <div id="search-results-section" class="hidden space-y-6 mb-8 fade-in">
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-                <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <i data-lucide="search-code" class="text-brand-500"></i> Hasil Pencarian Untuk: "<span id="search-keyword-display"></span>"
-                </h2>
-                <button onclick="clearSearch()" class="text-xs text-red-500 font-semibold hover:underline">Tutup Hasil</button>
-            </div>
-            <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Hasil pencarian disisipkan secara dinamis oleh JavaScript -->
-            </div>
-        </div>
-
-        <!-- DYNAMIC PAGE WRAPPER -->
-        <div id="page-content-wrapper">
-
-            <!-- HALAMAN 1: BERANDA (HOME) -->
-            <section id="page-home" class="space-y-8 fade-in">
-                <!-- Headline Banner -->
-                <div class="relative h-96 sm:h-[450px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-cover bg-center"
-                     style="background-image: linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.3)), url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80&w=1200');">
-                    <div class="absolute top-4 left-4 bg-brand-500 text-white font-bold text-[10px] uppercase px-3 py-1 rounded tracking-widest">
-                        Sorotan Utama
-                    </div>
-                    <div class="absolute bottom-8 left-6 right-6 md:left-12 md:right-12">
-                        <span class="text-blue-400 text-xs font-bold uppercase tracking-wider block mb-2">Peringkat Eksklusif</span>
-                        <h1 class="text-2xl sm:text-4xl font-extrabold font-oswald text-white uppercase leading-tight tracking-tight max-w-4xl">
-                            PERINGKAT: 50 PEMAIN TERBAIK DUNIA DI SELURUH CABANG OLAHRAGA MUSIM INI
-                        </h1>
-                        <p class="text-slate-200 text-xs sm:text-sm mt-3 max-w-2xl leading-relaxed">
-                            Kami merangkum atlet sepak bola, pebasket, pebalap, dan bintang badminton dengan pengaruh terbesar sepanjang turnamen global tahun ini.
-                        </p>
-                        <button onclick="switchPage('opini')" class="mt-4 bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs uppercase px-5 py-2.5 rounded-lg transition shadow-md hover:shadow-lg flex items-center gap-1.5">
-                            Baca Analisis Lengkap <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Grid Berita Terbaru (3 Kolom) -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
-                        <h3 class="font-oswald text-lg font-bold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-brand-500 rounded"></span> Berita Terbaru
-                        </h3>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">Diperbarui setiap menit</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Berita 1 -->
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                            <div>
-                                <div class="overflow-hidden rounded-lg mb-3">
-                                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&q=80" alt="Basket" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                                </div>
-                                <span class="text-sky-500 text-[10px] font-extrabold uppercase tracking-widest">Basket • NBA</span>
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Juara Bertahan Kunci Tiket Final NBA Setelah Laga Sengit 7 Game</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Tembakan tiga angka penentu di detik terakhir pertandingan membawa sukacita luar biasa bagi fans setia tuan rumah.</p>
-                            </div>
-                            <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 2 jam yang lalu</span>
-                        </div>
-
-                        <!-- Berita 2 -->
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                            <div>
-                                <div class="overflow-hidden rounded-lg mb-3">
-                                    <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=400&q=80" alt="Badminton" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                                </div>
-                                <span class="text-emerald-500 text-[10px] font-extrabold uppercase tracking-widest">Badminton • Indonesia Open</span>
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Ganda Putra Indonesia Juara Umum Indonesia Open 2026</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Melalui drama rubber game berdurasi 74 menit, Indonesia berhasil naik ke podium tertinggi turnamen tahun ini.</p>
-                            </div>
-                            <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 4 jam yang lalu</span>
-                        </div>
-
-                        <!-- Berita 3 -->
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                            <div>
-                                <div class="overflow-hidden rounded-lg mb-3">
-                                    <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=400&q=80" alt="Mobil Balap" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                                </div>
-                                <span class="text-red-500 text-[10px] font-extrabold uppercase tracking-widest">Motorsport • Formula 1</span>
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Siasat Cerdik Pit Stop Membuahkan Kemenangan Dramatis Tim Biru</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Keputusan krusial mengganti ban basah tepat sebelum rintik hujan turun merubah nasib tim di kualifikasi GP Monako.</p>
-                            </div>
-                            <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 5 jam yang lalu</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 2: SEPAK BOLA (SOCCER) -->
-            <section id="page-bola" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-brand-500 pl-4 py-1 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Kanal Sepak Bola</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Analisis taktik, transfer pemain, dan kejuaraan akbar internasional</p>
-                    </div>
-                    <!-- Filter Kategori -->
-                    <div class="flex items-center gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
-                        <button onclick="filterSoccer('semua')" id="btn-soccer-semua" class="bg-brand-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded transition">Semua</button>
-                        <button onclick="filterSoccer('nasional')" id="btn-soccer-nasional" class="text-slate-600 dark:text-slate-300 text-[10px] uppercase font-bold px-3 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">Nasional</button>
-                        <button onclick="filterSoccer('internasional')" id="btn-soccer-internasional" class="text-slate-600 dark:text-slate-300 text-[10px] uppercase font-bold px-3 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">Internasional</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="soccer-news-grid">
-                    <!-- Berita Bola 1 (Internasional) -->
-                    <div data-cat="internasional" class="soccer-card bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                        <div>
-                            <div class="overflow-hidden rounded-lg mb-3">
-                                <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400&q=80" alt="Sepak Bola Internasional" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                            </div>
-                            <span class="text-brand-500 text-[10px] font-extrabold uppercase tracking-widest">Liga Champions</span>
-                            <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Persiapan Matang Sang Pelatih Jerman Jelang Laga Final Eropa Terbesar</h4>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Mereka melaju ke partai final dengan rekor tak terkalahkan di babak penyisihan grup.</p>
-                        </div>
-                        <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 1 hari yang lalu</span>
-                    </div>
-
-                    <!-- Berita Bola 2 (Nasional) -->
-                    <div data-cat="nasional" class="soccer-card bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                        <div>
-                            <div class="overflow-hidden rounded-lg mb-3">
-                                <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=400&q=80" alt="Stadion Indonesia" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                            </div>
-                            <span class="text-brand-500 text-[10px] font-extrabold uppercase tracking-widest">Tim Nasional</span>
-                            <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Pemusatan Latihan Nasional Dimulai Demi Kualifikasi Piala Dunia mendatang</h4>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Dua puluh lima penggawa lokal dan luar negeri telah resmi bergabung di pusat pelatihan Jakarta.</p>
-                        </div>
-                        <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 2 hari yang lalu</span>
-                    </div>
-
-                    <!-- Berita Bola 3 (Internasional) -->
-                    <div data-cat="internasional" class="soccer-card bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 transition-all duration-300 flex flex-col justify-between group">
-                        <div>
-                            <div class="overflow-hidden rounded-lg mb-3">
-                                <img src="https://images.unsplash.com/photo-1431324155629-1a6edd1d141e?auto=format&fit=crop&w=400&q=80" alt="Liga Spanyol" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                            </div>
-                            <span class="text-brand-500 text-[10px] font-extrabold uppercase tracking-widest">Liga Spanyol</span>
-                            <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-brand-500 transition-all leading-snug">Bintang Madrid Cetak Gol Spektakuler Jarak Jauh Kunci Gelar Juara</h4>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Tendangan melengkung akurat dari luar kotak pinalti menyasar sudut kanan atas gawang.</p>
-                        </div>
-                        <span class="text-[10px] text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 3 hari yang lalu</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 3: BASKET (BASKETBALL) -->
-            <section id="page-basket" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-sky-500 pl-4 py-1">
-                    <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Dunia Basket</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Liputan penuh laga basket domestik dan kejuaraan NBA</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Kolom Berita Basket -->
-                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 transition-all group">
-                            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&q=80" alt="NBA All Star" class="h-40 w-full object-cover rounded-lg mb-3">
-                            <span class="text-sky-500 text-[9px] font-bold uppercase">NBA Global</span>
-                            <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 hover:text-brand-500 transition">Pertunjukan Fantastis Tim Timur Menangi Laga Tahunan All-Star</h4>
-                            <p class="text-xs text-slate-500 mt-2">Pesta dunk dan hujan tembakan tiga angka yang menghibur puluhan ribu penonton langsung.</p>
-                        </div>
-
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-brand-500 transition-all group">
-                            <img src="https://images.unsplash.com/photo-1519766304817-4f37bda74a27?auto=format&fit=crop&w=400&q=80" alt="IBL Indonesia" class="h-40 w-full object-cover rounded-lg mb-3">
-                            <span class="text-sky-500 text-[9px] font-bold uppercase">IBL Indonesia</span>
-                            <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 hover:text-brand-500 transition">Klub Kota Bandung Sukses Curi Kemenangan di Game Tandang Pertama</h4>
-                            <p class="text-xs text-slate-500 mt-2">Pertahanan zona ketat dan disiplin transisi yang luar biasa mengunci pergerakan guard import lawan.</p>
-                        </div>
-                    </div>
-
-                    <!-- Widget Polling Basket -->
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm h-fit">
-                        <h4 class="font-oswald text-md font-bold uppercase text-slate-800 dark:text-white border-b pb-2 mb-4 flex items-center gap-1.5">
-                            <i data-lucide="vote" class="text-sky-500 w-5 h-5"></i> Polling Mingguan
-                        </h4>
-                        <p class="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-4">Siapa pemain basket yang layak meraih penghargaan MVP Regular Season tahun ini?</p>
-
-                        <div class="space-y-3" id="polling-container">
-                            <button onclick="submitVote('A')" class="w-full text-left p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-slate-700 hover:border-sky-500 transition-all text-xs font-semibold">
-                                Option A: King James (Lakers)
-                            </button>
-                            <button onclick="submitVote('B')" class="w-full text-left p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-slate-700 hover:border-sky-500 transition-all text-xs font-semibold">
-                                Option B: Stephen Curry (Warriors)
-                            </button>
-                            <button onclick="submitVote('C')" class="w-full text-left p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-slate-700 hover:border-sky-500 transition-all text-xs font-semibold">
-                                Option C: Luka Doncic (Mavericks)
-                            </button>
-                        </div>
-
-                        <!-- Hasil Polling -->
-                        <div class="hidden space-y-4" id="polling-result">
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-bold">
-                                    <span>James</span> <span id="vote-val-A">42%</span>
-                                </div>
-                                <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                                    <div class="bg-sky-500 h-2 rounded-full" style="width: 42%"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-bold">
-                                    <span>Curry</span> <span id="vote-val-B">38%</span>
-                                </div>
-                                <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                                    <div class="bg-sky-400 h-2 rounded-full" style="width: 38%"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-bold">
-                                    <span>Doncic</span> <span id="vote-val-C">20%</span>
-                                </div>
-                                <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                                    <div class="bg-slate-300 dark:bg-slate-500 h-2 rounded-full" style="width: 20%"></div>
-                                </div>
-                            </div>
-                            <p class="text-[10px] text-emerald-500 font-bold italic text-center mt-2">Terima kasih atas partisipasi suara Anda!</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 4: BULU TANGKIS (BADMINTON) -->
-            <section id="page-badminton" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-emerald-500 pl-4 py-1">
-                    <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Lintas Bulu Tangkis</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Menyajikan prestasi gemilang atlet Indonesia di turnamen dunia</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Artikel Unggulan -->
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=700&q=80" alt="Badminton Racket" class="h-56 w-full object-cover rounded-lg mb-4">
-                            <span class="text-emerald-500 text-[10px] font-bold uppercase tracking-widest">BWF Masters</span>
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-white mt-1 hover:text-brand-500 transition">Kebangkitan Sektor Tunggal Putri Indonesia Sabet Emas Turnamen BWF Masters</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Turnamen bergengsi ini mempertemukan pemain kawakan. Taktik netting tipis menyulitkan pergerakan pemain kidal asal Jepang.</p>
-                        </div>
-                    </div>
-
-                    <!-- Accordion Jadwal Pertandingan -->
-                    <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm h-fit space-y-4">
-                        <h4 class="font-oswald text-md font-bold uppercase text-slate-800 dark:text-white border-b pb-2 flex items-center gap-1.5">
-                            <i data-lucide="calendar" class="text-emerald-500 w-5 h-5"></i> Jadwal Turnamen BWF 2026
-                        </h4>
-                        <p class="text-[11px] text-slate-500">Klik turnamen di bawah untuk melihat rincian tanggal & lokasi:</p>
-
-                        <div class="space-y-2">
-                            <!-- Item 1 -->
-                            <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
-                                <button onclick="toggleAccordion(1)" class="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 text-xs font-bold text-left hover:bg-slate-100 transition-all">
-                                    <span>All England Open 2026</span>
-                                    <i data-lucide="chevron-down" id="acc-icon-1" class="w-4 h-4 transition-transform"></i>
-                                </button>
-                                <div id="acc-content-1" class="hidden p-3 text-xs bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 space-y-1 text-slate-600 dark:text-slate-300">
-                                    <p><strong>Tanggal:</strong> 10 - 15 Maret 2026</p>
-                                    <p><strong>Lokasi:</strong> Birmingham, Inggris</p>
-                                    <p><strong>Kategori:</strong> BWF World Tour Super 1000</p>
-                                </div>
-                            </div>
-
-                            <!-- Item 2 -->
-                            <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
-                                <button onclick="toggleAccordion(2)" class="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 text-xs font-bold text-left hover:bg-slate-100 transition-all">
-                                    <span>Malaysia Open 2026</span>
-                                    <i data-lucide="chevron-down" id="acc-icon-2" class="w-4 h-4 transition-transform"></i>
-                                </button>
-                                <div id="acc-content-2" class="hidden p-3 text-xs bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 space-y-1 text-slate-600 dark:text-slate-300">
-                                    <p><strong>Tanggal:</strong> 25 - 30 April 2026</p>
-                                    <p><strong>Lokasi:</strong> Kuala Lumpur, Malaysia</p>
-                                    <p><strong>Kategori:</strong> BWF World Tour Super 750</p>
-                                </div>
-                            </div>
-
-                            <!-- Item 3 -->
-                            <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
-                                <button onclick="toggleAccordion(3)" class="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 text-xs font-bold text-left hover:bg-slate-100 transition-all">
-                                    <span>Singapore Open 2026</span>
-                                    <i data-lucide="chevron-down" id="acc-icon-3" class="w-4 h-4 transition-transform"></i>
-                                </button>
-                                <div id="acc-content-3" class="hidden p-3 text-xs bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 space-y-1 text-slate-600 dark:text-slate-300">
-                                    <p><strong>Tanggal:</strong> 02 - 07 Juni 2026</p>
-                                    <p><strong>Lokasi:</strong> Kallang, Singapura</p>
-                                    <p><strong>Kategori:</strong> BWF World Tour Super 750</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 5: BALAP (MOTORSPORT) -->
-            <section id="page-balap" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-red-500 pl-4 py-1">
-                    <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Balap & Otomotif</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Arena adu cepat kendaraan di aspal dan tanah: MotoGP & Formula 1</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-red-500 transition-all group">
-                        <div class="overflow-hidden rounded-lg mb-3">
-                            <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80" alt="MotoGP Rider" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <span class="text-red-500 text-[9px] font-bold uppercase tracking-widest">MotoGP Sirkuit</span>
-                        <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-red-500 transition">Perubahan Setelan Aero Winglet Berbuah Kemenangan Podium Pertama</h4>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">Pebalap Italia ini sukses menahan gempuran pebalap Spanyol hingga garis finish balapan di Sirkuit Mandalika.</p>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-red-500 transition-all group">
-                        <div class="overflow-hidden rounded-lg mb-3">
-                            <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=400&q=80" alt="F1 Pit Stop" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <span class="text-red-500 text-[9px] font-bold uppercase tracking-widest">Formula 1 Jet</span>
-                        <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-red-500 transition">Dominasi Red Bull Mulai Luntur, Mercedes Raih Posisi Satu Dua di Silverstone</h4>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">Gaya mengemudi yang sabar di kala trek setengah basah berhasil membuahkan hasil luar biasa.</p>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-red-500 transition-all group">
-                        <div class="overflow-hidden rounded-lg mb-3">
-                            <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=400&q=80" alt="Supercar" class="h-44 w-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <span class="text-red-500 text-[9px] font-bold uppercase tracking-widest">Kejuaraan Nasional</span>
-                        <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 group-hover:text-red-500 transition">Pebalap Muda Asal Surabaya Amankan Kemenangan Perdana Kelas Super GT</h4>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">Ia memimpin jalannya balapan semenjak bendera start dikibarkan tanpa mendapat perlawanan ketat.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 6: OLAHRAGA LAIN (OTHER SPORTS) -->
-            <section id="page-lainnya" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-purple-500 pl-4 py-1">
-                    <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Olahraga Lainnya</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Rangkuman cabang olahraga populer: Tenis, Renang, UFC, hingga E-sports</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row gap-4 hover:border-purple-500 transition">
-                        <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=300&q=80" alt="Grand Slam" class="w-full sm:w-36 h-28 object-cover rounded-lg shrink-0">
-                        <div class="flex flex-col justify-between">
-                            <div>
-                                <span class="text-purple-500 text-[9px] font-bold uppercase">Tenis Dunia</span>
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 hover:text-brand-500">Petenis Berbakat Spanyol Rebut Juara Grand Slam Lapangan Tanah Liat</h4>
-                                <p class="text-xs text-slate-500 mt-1">Uletnya pengembalian bola baseline membuat lawannya kehabisan tenaga.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row gap-4 hover:border-purple-500 transition">
-                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="Esports" class="w-full sm:w-36 h-28 object-cover rounded-lg shrink-0">
-                        <div class="flex flex-col justify-between">
-                            <div>
-                                <span class="text-purple-500 text-[9px] font-bold uppercase">E-sports</span>
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 hover:text-brand-500">Tim Indonesia Sukses Raih Gelar Juara Dunia Game Bergenre Strategi</h4>
-                                <p class="text-xs text-slate-500 mt-1">Mental tangguh dan eksekusi strategi matang di babak pamungkas membawa kemenangan manis.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 7: OPINI & ANALISIS (OPINION) -->
-            <section id="page-opini" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-slate-500 pl-4 py-1 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Opini & Esai</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Analisis tajam, kritis, dan berbobot dari jurnalis senior olahraga kami</p>
-                    </div>
-                    <!-- Font Size Controller -->
-                    <div class="flex items-center gap-1.5 bg-white dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-bold px-1.5">Ukuran Huruf:</span>
-                        <button onclick="changeFontSize('small')" id="btn-font-s" class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 font-bold hover:bg-slate-200">A-</button>
-                        <button onclick="changeFontSize('normal')" id="btn-font-n" class="px-2 py-0.5 rounded bg-brand-500 text-white font-bold">Normal</button>
-                        <button onclick="changeFontSize('large')" id="btn-font-l" class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 font-bold hover:bg-slate-200">A+</button>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-slate-800 p-6 sm:p-10 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm max-w-3xl mx-auto space-y-4">
-                    <div class="text-center space-y-2">
-                        <span class="text-brand-500 text-[10px] font-bold uppercase tracking-widest">Kolom Editorial Mingguan</span>
-                        <h3 class="text-xl sm:text-2xl font-oswald font-bold text-slate-800 dark:text-white uppercase leading-tight">INVESTASI ATLET USIA DINI: KUNCI UTAMA MERAIH PRESTASI OLAHRAGA BERKELANJUTAN</h3>
-                        <div class="flex items-center justify-center gap-2 text-[11px] text-slate-400 mt-2">
-                            <span>Ditulis oleh: <strong>Andi Wijaya</strong> (Redaktur Senior)</span>
-                            <span>•</span>
-                            <span>26 Mei 2026</span>
-                        </div>
-                    </div>
-
-                    <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=80" alt="Latihan Fisik" class="h-64 w-full object-cover rounded-xl my-4 shadow-sm">
-
-                    <!-- Area Teks Esai dikontrol ukurannya lewat JS -->
-                    <div id="opinion-article-text" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed space-y-4">
-                        <p>
-                            Meraih podium juara di kancah internasional adalah dambaan setiap bangsa. Namun, realita membuktikan bahwa jalan menuju kejayaan tidak bisa dibangun secara instan melalui program naturalisasi atlet kilat atau sekadar pemusatan latihan berdurasi beberapa pekan menjelang kejuaraan.
-                        </p>
-                        <p>
-                            Negara-negara yang mendominasi perolehan medali emas di Olimpiade, seperti Tiongkok, Amerika Serikat, dan Jerman, memiliki kesamaan mendasar: sistem kurikulum olahraga sekolah dasar terstruktur rapi. Mereka menanamkan kecintaan olahraga sejak belia, mengasah bakat alami anak, dan menyediakan fasilitas latihan berstandar baik.
-                        </p>
-                        <p>
-                            Di sinilah Indonesia perlu merombak fundamental pola pembinaan olahraga. Guru-guru penjaskes sekolah dasar harus memiliki bekal pengetahuan sains olahraga (<em>sports science</em>) dasar yang mumpuni guna mengidentifikasi anak yang berbakat di cabang atletik, renang, bulu tangkis, atau senam sejak dini. Melalui pembinaan bertahap yang didukung gizi seimbang, niscaya merah putih akan terus berkibar gagah di masa mendatang.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- HALAMAN 8: TENTANG KAMI & KONTAK (ABOUT & CONTACT) -->
-            <section id="page-tentang" class="hidden space-y-6 fade-in">
-                <div class="border-l-4 border-slate-500 pl-4 py-1">
-                    <h2 class="font-oswald text-2xl font-bold uppercase tracking-tight text-slate-800 dark:text-white">Tentang Redaksi</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Siapa kami dan bagaimana pembaca sekalian dapat mengirimkan kontribusi tulisan berita</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Visi Misi -->
-                    <div class="space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <h3 class="font-oswald text-lg font-bold text-slate-800 dark:text-white uppercase tracking-wider">VISI KAMI</h3>
-                        <p>
-                            <strong>SportsBlue</strong> didirikan sebagai media berita independen yang fokus menyajikan fakta, hasil turnamen, analisis mendalam, serta ulasan olahraga yang berimbang, akurat, dan tepercaya untuk pemirsa di Indonesia.
-                        </p>
-                        <p>
-                            Kami merancang website ini secara statis, hemat kuota internet, serta bebas akses sepenuhnya tanpa perlu melakukan registrasi akun atau login. Kami ingin mempermudah akses membaca berita bagi semua kalangan tanpa ribet.
-                        </p>
-                        <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                            <h4 class="font-bold text-slate-800 dark:text-white">ALAMAT REDAKSI:</h4>
-                            <p>Gedung Blue Media Lt. 4, Gading Serpong, Tangerang, Banten.</p>
-                            <p><strong>Email:</strong> redaksi@sportsblue.co.id</p>
-                        </div>
-                    </div>
-
-                    <!-- Formulir Masukan -->
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
-                        <h3 class="font-oswald text-md font-bold uppercase text-brand-500">Hubungi Kami / Kirim Masukan</h3>
-                        <p class="text-[11px] text-slate-500">Saran, kritik konstruktif, maupun koreksi tulisan berita dari Anda sangat kami butuhkan.</p>
-
-                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-3.5 text-xs text-slate-700 dark:text-slate-300">
-                            <div>
-                                <label class="block font-semibold mb-1">Nama Pengirim <span class="text-red-500">*</span></label>
-                                <input type="text" id="form-nama" class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 p-2 rounded outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-white" placeholder="Masukkan nama lengkap Anda..." required>
-                            </div>
-                            <div>
-                                <label class="block font-semibold mb-1">Email <span class="text-red-500">*</span></label>
-                                <input type="email" id="form-email" class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 p-2 rounded outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-white" placeholder="contoh: budi@gmail.com" required>
-                                <p id="email-error" class="hidden text-[10px] text-red-500 font-semibold mt-1">Mohon masukkan format email yang valid!</p>
-                            </div>
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <label class="block font-semibold">Tulis Saran Anda <span class="text-red-500">*</span></label>
-                                    <span class="text-[10px] text-slate-400"><span id="char-count">0</span> / 200 karakter</span>
-                                </div>
-                                <textarea id="form-pesan" rows="3" oninput="updateCharCount()" maxlength="200" class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 p-2 rounded outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-white" placeholder="Tulis masukan di sini..." required></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 rounded transition uppercase tracking-wider flex items-center justify-center gap-1.5">
-                                Kirim Saran Redaksi <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-    </main>
-
-    <!-- FOOTER SITUS -->
-    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-6 text-xs text-slate-500 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-                <p class="font-bold text-slate-700 dark:text-slate-300">© 2026 SportsBlue Indonesia. Seluruh hak cipta dilindungi.</p>
-                <p class="text-[10px] text-slate-400 mt-0.5">Dibuat menggunakan HTML, CSS (Tailwind), dan JavaScript murni.</p>
-            </div>
-            <div class="flex gap-4 font-semibold text-brand-500">
-                <button onclick="switchPage('tentang')" class="hover:underline">Tentang Kami</button>
-                <span>•</span>
-                <button onclick="switchPage('tentang')" class="hover:underline">Kontak</button>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Custom Modal Sukses (Pengganti Alert Browser) -->
-    <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 max-w-sm w-full p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4 text-center fade-in">
-            <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto">
-                <i data-lucide="check-circle-2" class="w-6 h-6"></i>
-            </div>
-            <div class="space-y-1.5">
-                <h4 class="font-oswald text-md font-bold uppercase text-slate-800 dark:text-white">Pesan Terkirim!</h4>
-                <p id="modal-desc" class="text-xs text-slate-500 leading-relaxed">Terima kasih <strong id="user-display-name"></strong>, masukan Anda telah kami terima dan akan diteruskan ke redaksi.</p>
-            </div>
-            <button onclick="closeModal()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-2 rounded text-xs uppercase tracking-wider transition">
-                Tutup Jendela
-            </button>
         </div>
     </div>
 
-    <!-- Script JS Eksternal (dimuat di akhir body agar DOM sudah siap) -->
-    <script src="home.js"></script>
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-search-wrap">
+            <svg class="mobile-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="global-search-mobile" oninput="liveSearchMobile()" placeholder="Cari berita...">
+        </div>
+        <button onclick="switchPage('home');toggleMobileMenu()"      class="mobile-nav-btn active">Beranda</button>
+        <button onclick="switchPage('bola');toggleMobileMenu()"      class="mobile-nav-btn">Sepak Bola</button>
+        <button onclick="switchPage('basket');toggleMobileMenu()"    class="mobile-nav-btn">Basket</button>
+        <button onclick="switchPage('badminton');toggleMobileMenu()" class="mobile-nav-btn">Bulu Tangkis</button>
+        <button onclick="switchPage('balap');toggleMobileMenu()"     class="mobile-nav-btn">    </button>
+        <button onclick="switchPage('lainnya');toggleMobileMenu()"   class="mobile-nav-btn">Olahraga Lain</button>
+        <button onclick="switchPage('opini');toggleMobileMenu()"     class="mobile-nav-btn">Opini</button>
+        <button onclick="switchPage('tentang');toggleMobileMenu()"   class="mobile-nav-btn">Tentang Kami</button>
+    </div>
+</header>
 
+<!-- ===== MAIN ===== -->
+<main class="main-content">
+        <!-- ==================== HALAMAN DETAIL BERITA (DINAMIS) ==================== -->
+        <section id="page-detail" class="page-section fade-in">
+
+            <!-- Tombol Kembali (teks diisi dinamis oleh JS) -->
+            <button id="detail-back-btn" onclick="closeDetail()" class="back-btn">
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                Kembali ke Beranda
+            </button>
+
+            <!-- Hero Gambar -->
+            <div class="detail-hero">
+                <img id="detail-hero-img" src="" alt="Hero Berita">
+                <div class="detail-hero-overlay"></div>
+                <div id="detail-hero-badge" class="detail-hero-badge">Basket • NBA</div>
+                <div id="detail-hero-label" class="detail-hero-label">NBA Playoffs 2026</div>
+            </div>
+
+            <!-- Konten + Sidebar -->
+            <div class="detail-wrapper">
+
+                <!-- Artikel -->
+                <article class="detail-article">
+                    <span id="detail-tag" class="detail-tag">Basket • NBA Playoffs 2026</span>
+                    <h1 id="detail-title" class="detail-title">Judul Berita</h1>
+
+                    <div class="detail-meta">
+                        <span class="detail-meta-item">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Oleh: <strong id="detail-meta-author">-</strong>
+                        </span>
+                        <span class="detail-meta-item">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span id="detail-meta-date">-</span>
+                        </span>
+                        <span class="detail-meta-item">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span id="detail-meta-read">-</span>
+                        </span>
+                    </div>
+
+                    <p id="detail-lead" class="detail-lead"></p>
+                    <div id="detail-body" class="detail-body"></div>
+
+                    <div id="detail-tags" class="detail-tags"></div>
+                </article>
+
+                <!-- Sidebar -->
+                <aside class="detail-sidebar">
+
+                    <!-- Statistik Pertandingan -->
+                    <div id="detail-stats-widget" class="sidebar-widget">
+                        <h4 class="sidebar-widget-title">Statistik Pertandingan</h4>
+                        <div id="detail-stats-box" class="stats-box"></div>
+                    </div>
+
+                    <!-- Berita Terkait -->
+                    <div class="sidebar-widget">
+                        <h4 class="sidebar-widget-title">Berita Terkait</h4>
+                        <div id="detail-related-list"></div>
+                    </div>
+
+                </aside>
+            </div>
+
+        </section>
+
+        <!-- ==================== HALAMAN 1: BERANDA ==================== -->
+        <section id="page-home" class="page-section active fade-in">
+
+            <div class="hero-banner" onclick="openDetail('opini-top50')">
+                <img src="laureus.webp" alt="Hero Banner">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge">Sorotan Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag">Peringkat Eksklusif</span>
+                    <h1 class="hero-title">PERINGKAT: 50 PEMAIN TERBAIK DUNIA DI SELURUH CABANG OLAHRAGA MUSIM INI</h1>
+                    <p class="hero-desc">Kami merangkum atlet sepak bola, pebasket, pebalap, dan bintang badminton dengan pengaruh terbesar sepanjang turnamen global tahun ini.</p>
+                    <span class="hero-cta">
+                        Baca Analisis Lengkap
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-heading">
+                    <h3 class="section-title">
+                        <span class="section-title-bar"></span>
+                        Berita Terbaru
+                    </h3>
+                    <span class="section-subtitle">Diperbarui setiap menit</span>
+                </div>
+                <div class="news-grid" style="margin-top:1rem">
+                    <div class="news-card" onclick="openDetail('nba-final-game7')">
+                        <div>
+                            <div class="news-card-img-wrap"><img src="okc.webp" alt="Basket"></div>
+                            <span class="news-card-tag tag-sky">Basket • NBA</span>
+                            <h4 class="news-card-title">Juara Bertahan Kunci Tiket Final NBA Setelah Laga Sengit 7 Game</h4>
+                            <p class="news-card-desc">Tembakan tiga angka penentu di detik terakhir pertandingan membawa sukacita luar biasa bagi fans setia tuan rumah.</p>
+                        </div>
+                        <span class="news-card-time">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            2 jam yang lalu
+                        </span>
+                    </div>
+                    <div class="news-card" onclick="openDetail('indonesia-open-ganda')">
+                        <div>
+                            <div class="news-card-img-wrap"><img src="ganda.jpg" alt="Badminton"></div>
+                            <span class="news-card-tag tag-green">Badminton • Indonesia Open</span>
+                            <h4 class="news-card-title">Ganda Putra Indonesia Juara Umum Indonesia Open 2026</h4>
+                            <p class="news-card-desc">Melalui drama rubber game berdurasi 74 menit, Indonesia berhasil naik ke podium tertinggi turnamen tahun ini.</p>
+                        </div>
+                        <span class="news-card-time">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            4 jam yang lalu
+                        </span>
+                    </div>
+                    <div class="news-card" onclick="openDetail('pitstop-dramatis')">
+                        <div>
+                            <div class="news-card-img-wrap"><img src="f1.webp" alt="Mobil Balap"></div>
+                            <span class="news-card-tag tag-red">Motorsport • Formula 1</span>
+                            <h4 class="news-card-title">Siasat Cerdik Pit Stop Membuahkan Kemenangan Dramatis Tim Biru</h4>
+                            <p class="news-card-desc">Keputusan krusial mengganti ban basah tepat sebelum rintik hujan turun merubah nasib tim di kualifikasi GP Monako.</p>
+                        </div>
+                        <span class="news-card-time">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            5 jam yang lalu
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 2: SEPAK BOLA ==================== -->
+        <section id="page-bola" class="page-section fade-in">
+            <div class="channel-heading">
+                <div>
+                    <h2 class="channel-title">Kanal Sepak Bola</h2>
+                    <p class="channel-desc">Analisis taktik, transfer pemain, dan kejuaraan akbar internasional</p>
+                </div>
+                <div class="filter-tabs">
+                    <button onclick="filterSoccer('semua')"         id="btn-soccer-semua"         class="filter-tab active">Semua</button>
+                    <button onclick="filterSoccer('nasional')"      id="btn-soccer-nasional"      class="filter-tab">Nasional</button>
+                    <button onclick="filterSoccer('internasional')" id="btn-soccer-internasional" class="filter-tab">Internasional</button>
+                </div>
+            </div>
+
+            <div class="hero-banner" onclick="openDetail('madrid-champions')" data-cat="internasional">
+                <img src="madrid.jpg" alt="Final Champions">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge">Berita Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag">Liga Champions UEFA</span>
+                    <h2 class="hero-title">DRAMA ADU PENALTI BAWA MADRID KE FINAL: MALAM YANG TAK TERLUPAKAN DI BERNABEU</h2>
+                    <p class="hero-desc">Lima penalti sempurna mengantar Los Blancos melaju ke partai puncak untuk kali ketiga berturut-turut musim ini.</p>
+                    <span class="hero-read-more">Baca Selengkapnya →</span>
+                </div>
+            </div>
+
+            <div class="news-grid" id="soccer-news-grid">
+                <div data-cat="internasional" class="soccer-card news-card" onclick="openDetail('bintang-madrid')">
+                    <div>
+                        <div class="news-card-img-wrap"><img src="guler.webp" alt="Liga Spanyol"></div>
+                        <span class="news-card-tag tag-brand">Liga Spanyol</span>
+                        <h4 class="news-card-title">Bintang Madrid Cetak Gol Spektakuler Jarak Jauh Kunci Gelar Juara</h4>
+                        <p class="news-card-desc">Tendangan melengkung akurat dari luar kotak pinalti menyasar sudut kanan atas gawang.</p>
+                    </div>
+                    <span class="news-card-time">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        3 hari yang lalu
+                    </span>
+                </div>
+                <div data-cat="nasional" class="soccer-card news-card" onclick="openDetail('timnas-latihan')">
+                    <div>
+                        <div class="news-card-img-wrap"><img src="timnas.jpg" alt="Timnas"></div>
+                        <span class="news-card-tag tag-brand">Tim Nasional</span>
+                        <h4 class="news-card-title">Pemusatan Latihan Nasional Dimulai Demi Kualifikasi Piala Dunia Mendatang</h4>
+                        <p class="news-card-desc">25 penggawa lokal dan luar negeri resmi bergabung di pusat pelatihan Jakarta.</p>
+                    </div>
+                    <span class="news-card-time">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        2 hari yang lalu
+                    </span>
+                </div>
+                <div data-cat="internasional" class="soccer-card news-card" onclick="openDetail('pelatih-jerman')">
+                    <div>
+                        <div class="news-card-img-wrap"><img src="flick.webp" alt="Liga Champions"></div>
+                        <span class="news-card-tag tag-brand">Liga Champions</span>
+                        <h4 class="news-card-title">Persiapan Matang Sang Pelatih Jerman Jelang Laga Final Eropa Terbesar</h4>
+                        <p class="news-card-desc">Mereka melaju ke partai final dengan rekor tak terkalahkan di babak penyisihan grup.</p>
+                    </div>
+                    <span class="news-card-time">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        1 hari yang lalu
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 3: BASKET ==================== -->
+        <section id="page-basket" class="page-section fade-in">
+            <div class="channel-heading sky">
+                <div>
+                    <h2 class="channel-title">Dunia Basket</h2>
+                    <p class="channel-desc">Liputan penuh laga basket domestik dan kejuaraan NBA</p>
+                </div>
+            </div>
+
+            <div class="hero-banner" onclick="openDetail('nba-final-game7')">
+                <img src="okc.webp" alt="NBA Finals">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge sky">Berita Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag sky">NBA Playoffs 2026</span>
+                    <h2 class="hero-title">JUARA BERTAHAN KUNCI TIKET FINAL NBA SETELAH LAGA SENGIT 7 GAME</h2>
+                    <p class="hero-desc">Tembakan tiga angka penentu di detik terakhir membawa sukacita luar biasa bagi fans setia tuan rumah.</p>
+                    <span class="hero-read-more">Baca Selengkapnya →</span>
+                </div>
+            </div>
+
+            <div class="sidebar-layout">
+                <div class="sidebar-main sidebar-col-2">
+                    <div class="news-card" onclick="openDetail('nba-allstar')" style="cursor:pointer">
+                        <img src="star.webp" alt="NBA All Star" style="height:10rem;width:100%;object-fit:cover;border-radius:0.5rem;margin-bottom:0.75rem">
+                        <span class="news-card-tag tag-sky">NBA Global</span>
+                        <h4 class="news-card-title">Pertunjukan Fantastis Tim Timur Menangi Laga Tahunan All-Star</h4>
+                        <p class="news-card-desc">Pesta dunk dan hujan tembakan tiga angka yang menghibur puluhan ribu penonton langsung.</p>
+                    </div>
+                    <div class="news-card" onclick="openDetail('ibl-bandung')" style="cursor:pointer">
+                        <img src="sm.webp" alt="IBL Indonesia" style="height:10rem;width:100%;object-fit:cover;border-radius:0.5rem;margin-bottom:0.75rem">
+                        <span class="news-card-tag tag-sky">IBL Indonesia</span>
+                        <h4 class="news-card-title">Klub Kota Bandung Sukses Curi Kemenangan di Game Tandang Pertama</h4>
+                        <p class="news-card-desc">Pertahanan zona ketat dan disiplin transisi mengunci pergerakan guard import lawan.</p>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h4 class="widget-title sky">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        Polling Mingguan
+                    </h4>
+                    <p class="poll-question">Siapa pemain basket layak meraih MVP Regular Season tahun ini?</p>
+                    <div class="poll-options" id="polling-container">
+                        <button onclick="submitVote('A')" class="poll-option-btn">Option A: King James (Lakers)</button>
+                        <button onclick="submitVote('B')" class="poll-option-btn">Option B: Stephen Curry (Warriors)</button>
+                        <button onclick="submitVote('C')" class="poll-option-btn">Option C: Luka Doncic (Mavericks)</button>
+                    </div>
+                    <div class="poll-results" id="polling-result">
+                        <div class="poll-result-row">
+                            <div class="poll-result-label"><span>James</span><span id="vote-val-A">42%</span></div>
+                            <div class="poll-bar-track"><div class="poll-bar-fill sky" style="width:42%"></div></div>
+                        </div>
+                        <div class="poll-result-row">
+                            <div class="poll-result-label"><span>Curry</span><span id="vote-val-B">38%</span></div>
+                            <div class="poll-bar-track"><div class="poll-bar-fill sky2" style="width:38%"></div></div>
+                        </div>
+                        <div class="poll-result-row">
+                            <div class="poll-result-label"><span>Doncic</span><span id="vote-val-C">20%</span></div>
+                            <div class="poll-bar-track"><div class="poll-bar-fill grey" style="width:20%"></div></div>
+                        </div>
+                        <p class="poll-thanks">Terima kasih atas partisipasi Anda!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 4: BADMINTON ==================== -->
+        <section id="page-badminton" class="page-section fade-in">
+            <div class="channel-heading green">
+                <div>
+                    <h2 class="channel-title">Lintas Bulu Tangkis</h2>
+                    <p class="channel-desc">Menyajikan prestasi gemilang atlet Indonesia di turnamen dunia</p>
+                </div>
+            </div>
+
+            <div class="hero-banner" onclick="openDetail('bwf-tunggal-putri')">
+                <img src="putri.jpg" alt="BWF Masters">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge green">Berita Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag green">BWF World Tour 2026</span>
+                    <h2 class="hero-title">KEBANGKITAN TUNGGAL PUTRI INDONESIA SABET EMAS TURNAMEN BWF MASTERS</h2>
+                    <p class="hero-desc">Taktik netting tipis dan permainan net yang agresif menyulitkan pergerakan pemain kidal asal Jepang.</p>
+                    <span class="hero-read-more">Baca Selengkapnya →</span>
+                </div>
+            </div>
+
+            <div class="sidebar-layout">
+                <div class="sidebar-main">
+                    <div class="news-card" onclick="openDetail('indonesia-open-ganda')" style="cursor:pointer">
+                        <img src="ganda.jpg" alt="Badminton" style="height:12rem;width:100%;object-fit:cover;border-radius:0.5rem;margin-bottom:1rem">
+                        <span class="news-card-tag tag-green">BWF Masters</span>
+                        <h3 class="news-card-title" style="font-size:1.125rem">Ganda Putra Indonesia Juara Umum Indonesia Open 2026</h3>
+                        <p class="news-card-desc">Melalui drama rubber game berdurasi 74 menit, pasangan Indonesia berhasil naik ke podium tertinggi turnamen tahun ini.</p>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h4 class="widget-title green">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Jadwal BWF 2026
+                    </h4>
+                    <p style="font-size:0.6875rem;color:var(--text-muted);margin-bottom:0.75rem">Klik untuk melihat rincian:</p>
+                    <div class="accordion-list">
+                        <div class="accordion-item">
+                            <button onclick="toggleAccordion(1)" class="accordion-trigger" id="acc-btn-1">
+                                <span>All England Open 2026</span>
+                                <svg id="acc-icon-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div id="acc-content-1" class="accordion-content">
+                                <p><strong>Tanggal:</strong> 10 - 15 Maret 2026</p>
+                                <p><strong>Lokasi:</strong> Birmingham, Inggris</p>
+                                <p><strong>Kategori:</strong> BWF Super 1000</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button onclick="toggleAccordion(2)" class="accordion-trigger" id="acc-btn-2">
+                                <span>Malaysia Open 2026</span>
+                                <svg id="acc-icon-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div id="acc-content-2" class="accordion-content">
+                                <p><strong>Tanggal:</strong> 25 - 30 April 2026</p>
+                                <p><strong>Lokasi:</strong> Kuala Lumpur, Malaysia</p>
+                                <p><strong>Kategori:</strong> BWF Super 750</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button onclick="toggleAccordion(3)" class="accordion-trigger" id="acc-btn-3">
+                                <span>Singapore Open 2026</span>
+                                <svg id="acc-icon-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div id="acc-content-3" class="accordion-content">
+                                <p><strong>Tanggal:</strong> 02 - 07 Juni 2026</p>
+                                <p><strong>Lokasi:</strong> Kallang, Singapura</p>
+                                <p><strong>Kategori:</strong> BWF Super 750</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 5: BALAP ==================== -->
+        <section id="page-balap" class="page-section fade-in">
+            <div class="channel-heading red">
+                <div>
+                    <h2 class="channel-title">Balap & Otomotif</h2>
+                    <p class="channel-desc">Arena adu cepat kendaraan di aspal dan tanah: MotoGP & Formula 1</p>
+                </div>
+            </div>
+
+            <div class="hero-banner" onclick="openDetail('mercedes-silverstone')">
+                <img src="russel.webp" alt="F1">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge red">Berita Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag red">Formula 1 • Grand Prix 2026</span>
+                    <h2 class="hero-title">DOMINASI RED BULL MULAI LUNTUR, MERCEDES RAIH POSISI SATU DUA DI SILVERSTONE</h2>
+                    <p class="hero-desc">Gaya mengemudi sabar di trek setengah basah membuahkan hasil luar biasa bagi duo driver Mercedes.</p>
+                    <span class="hero-read-more">Baca Selengkapnya →</span>
+                </div>
+            </div>
+
+            <div class="news-grid">
+                <div class="news-card" onclick="openDetail('motogp-mandalika')">
+                    <div>
+                        <div class="news-card-img-wrap"><img src="gp.jpg" alt="MotoGP"></div>
+                        <span class="news-card-tag tag-red">MotoGP Sirkuit</span>
+                        <h4 class="news-card-title">Perubahan Setelan Aero Winglet Berbuah Kemenangan Podium Pertama</h4>
+                        <p class="news-card-desc">Pebalap Italia sukses menahan gempuran pebalap Spanyol di Sirkuit Mandalika.</p>
+                    </div>
+                    <span class="news-card-time">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Kemarin
+                    </span>
+                </div>
+                <div class="news-card" onclick="openDetail('pitstop-dramatis')">
+                    <div>
+                        <div class="news-card-img-wrap"><img src="f1.webp" alt="F1"></div>
+                        <span class="news-card-tag tag-red">Formula 1</span>
+                        <h4 class="news-card-title">Siasat Cerdik Pit Stop Membuahkan Kemenangan Dramatis Tim Biru</h4>
+                        <p class="news-card-desc">Keputusan mengganti ban basah tepat sebelum hujan turun merubah nasib tim di GP Monako.</p>
+                    </div>
+                    <span class="news-card-time">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        5 jam yang lalu
+                    </span>
+                </div>
+        </section>
+
+        <!-- ==================== HALAMAN 6: LAINNYA ==================== -->
+        <section id="page-lainnya" class="page-section fade-in">
+            <div class="channel-heading purple">
+                <div>
+                    <h2 class="channel-title">Olahraga Lainnya</h2>
+                    <p class="channel-desc">Tenis, Renang, UFC, hingga E-sports</p>
+                </div>
+            </div>
+
+            <div class="hero-banner sm" onclick="openDetail('roland-garros-spanyol')">
+                <img src="tenis.jpeg" alt="Grand Slam">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge purple">Berita Utama</div>
+                <div class="hero-content">
+                    <span class="hero-tag purple">Grand Slam • Roland Garros</span>
+                    <h2 class="hero-title">PETENIS BERBAKAT SPANYOL REBUT JUARA GRAND SLAM LAPANGAN TANAH LIAT</h2>
+                    <p class="hero-desc">Uletnya pengembalian bola baseline membuat lawannya kehabisan tenaga di set ketiga.</p>
+                    <span class="hero-read-more">Baca Selengkapnya →</span>
+                </div>
+            </div>
+
+            <div class="news-grid-2col">
+                <div class="news-card-horizontal" onclick="openDetail('roland-garros-spanyol')">
+                    <img src="tenis.jpeg" alt="Grand Slam">
+                    <div>
+                        <span class="news-card-tag tag-purple">Tenis Dunia</span>
+                        <h4 class="news-card-title" style="margin-top:0.25rem">Petenis Berbakat Spanyol Rebut Juara Grand Slam Lapangan Tanah Liat</h4>
+                        <p class="news-card-desc" style="margin-top:0.25rem">Uletnya pengembalian bola baseline membuat lawannya kehabisan tenaga.</p>
+                    </div>
+                </div>
+                <div class="news-card-horizontal" onclick="openDetail('esports-strategi')">
+                    <img src="fm.jpeg" alt="Esports">
+                    <div>
+                        <span class="news-card-tag tag-purple">E-sports</span>
+                        <h4 class="news-card-title" style="margin-top:0.25rem">Tim Indonesia Sukses Raih Gelar Juara Dunia Game Bergenre Strategi</h4>
+                        <p class="news-card-desc" style="margin-top:0.25rem">Mental tangguh dan eksekusi strategi matang di babak pamungkas membawa kemenangan manis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 7: OPINI ==================== -->
+        <section id="page-opini" class="page-section fade-in">
+            <div class="channel-heading slate">
+                <div>
+                    <h2 class="channel-title">Opini & Esai</h2>
+                    <p class="channel-desc">Analisis tajam dan berbobot dari jurnalis senior olahraga kami</p>
+                </div>
+                <div class="article-font-controls">
+                    <span class="font-size-label">Ukuran Huruf:</span>
+                    <button onclick="changeFontSize('small')"  id="btn-font-s" class="font-size-btn">A-</button>
+                    <button onclick="changeFontSize('normal')" id="btn-font-n" class="font-size-btn active">Normal</button>
+                    <button onclick="changeFontSize('large')"  id="btn-font-l" class="font-size-btn">A+</button>
+                </div>
+            </div>
+
+            <div class="hero-banner sm" onclick="openDetail('opini-top50')">
+                <img src="laureus.webp" alt="Opini">
+                <div class="hero-overlay"></div>
+                <div class="hero-badge slate">Kolom Editorial</div>
+                <div class="hero-content">
+                    <span class="hero-tag slate">Opini • Andi Wijaya</span>
+                    <h2 class="hero-title">PERINGKAT: 50 PEMAIN TERBAIK DUNIA DI SELURUH CABANG OLAHRAGA MUSIM INI</h2>
+                    <p class="hero-desc">Kami merangkum atlet terbaik dari berbagai cabang dengan pengaruh terbesar sepanjang turnamen global tahun ini.</p>
+                </div>
+            </div>
+
+            <div class="article-card" onclick="openDetail('opini-atlet-dini')" style="cursor:pointer">
+                <div class="article-header">
+                    <span class="article-eyebrow">Kolom Editorial Mingguan</span>
+                    <h3 class="article-title">INVESTASI ATLET USIA DINI: KUNCI UTAMA MERAIH PRESTASI OLAHRAGA BERKELANJUTAN</h3>
+                    <div class="article-meta">
+                        <span>Ditulis oleh: <strong>Andi Wijaya</strong> (Redaktur Senior)</span>
+                        <span>•</span>
+                        <span>26 Mei 2026</span>
+                    </div>
+                </div>
+                <img src="laureus.webp" alt="Latihan Fisik" class="article-img">
+                <div id="opinion-article-text" class="article-body text-normal">
+                    <p>Meraih podium juara di kancah internasional adalah dambaan setiap bangsa. Namun, realita membuktikan bahwa jalan menuju kejayaan tidak bisa dibangun secara instan melalui program naturalisasi atlet kilat atau sekadar pemusatan latihan berdurasi beberapa pekan menjelang kejuaraan.</p>
+                    <p>Negara-negara yang mendominasi perolehan medali emas di Olimpiade, seperti Tiongkok, Amerika Serikat, dan Jerman, memiliki kesamaan mendasar: sistem kurikulum olahraga sekolah dasar terstruktur rapi. Mereka menanamkan kecintaan olahraga sejak belia, mengasah bakat alami anak, dan menyediakan fasilitas latihan berstandar baik.</p>
+                    <p style="color:var(--brand-500);font-weight:700;font-size:0.75rem;margin-top:0.75rem">Klik untuk membaca artikel lengkap →</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN 8: TENTANG ==================== -->
+        <section id="page-tentang" class="page-section fade-in">
+            <div class="channel-heading slate">
+                <div>
+                    <h2 class="channel-title">Tentang Redaksi</h2>
+                    <p class="channel-desc">Siapa kami dan bagaimana mengirimkan kontribusi</p>
+                </div>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>VISI KAMI</h3>
+                    <p><strong>SportsBlue</strong> didirikan sebagai media berita independen yang fokus menyajikan fakta, hasil turnamen, analisis mendalam, serta ulasan olahraga yang berimbang, akurat, dan tepercaya untuk pemirsa di Indonesia.</p>
+                    <p>Kami merancang website ini secara statis, hemat kuota internet, serta bebas akses tanpa perlu registrasi akun atau login.</p>
+                    <div class="address-box">
+                        <h4>ALAMAT REDAKSI:</h4>
+                        <p>Gedung Blue Media Lt. 4, Gading Serpong, Tangerang, Banten.</p>
+                        <p><strong>Email:</strong> redaksi@sportsblue.co.id</p>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <h3 class="contact-card-title">Hubungi Kami / Kirim Masukan</h3>
+                    <p class="contact-card-hint">Saran, kritik konstruktif, maupun koreksi tulisan sangat kami butuhkan.</p>
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label class="form-label">Nama Pengirim <span class="required">*</span></label>
+                            <input type="text" id="form-nama" class="form-input" placeholder="Nama lengkap Anda..." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" id="form-email" class="form-input" placeholder="contoh: budi@gmail.com" required>
+                            <p id="email-error" class="email-error">Mohon masukkan format email yang valid!</p>
+                        </div>
+                        <div class="form-group">
+                            <div class="char-counter-row">
+                                <label class="form-label" style="margin-bottom:0">Tulis Saran Anda <span class="required">*</span></label>
+                                <span class="char-counter"><span id="char-count">0</span> / 200 karakter</span>
+                            </div>
+                            <textarea id="form-pesan" rows="3" oninput="updateCharCount()" maxlength="200" class="form-textarea" placeholder="Tulis masukan di sini..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            Kirim Saran Redaksi
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- end page-content-wrapper -->
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div>
+                <p class="footer-copy">© 2026 SportsBlue Indonesia. Seluruh hak cipta dilindungi.</p>
+                <p class="footer-sub">Dibuat menggunakan HTML, CSS murni, dan JavaScript.</p>
+            </div>
+            <div class="footer-links">
+                <button onclick="switchPage('tentang')">Tentang Kami</button>
+                <span class="footer-dot">•</span>
+                <button onclick="switchPage('tentang')">Kontak</button>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal Sukses -->
+<div id="custom-modal" class="modal-overlay">
+    <div class="modal-box fade-in">
+        <div class="modal-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+            <h4 class="modal-title">Pesan Terkirim!</h4>
+            <p class="modal-msg">Terima kasih <strong id="user-display-name"></strong>, masukan Anda telah kami terima.</p>
+        </div>
+        <button onclick="closeModal()" class="modal-close-btn">Tutup Jendela</button>
+    </div>
+</div>
+
+<script src="home.js"></script>
 </body>
 </html>
