@@ -796,6 +796,7 @@ function toggleMobileMenu() {
         iconClose.style.display = 'block';
     }
 }
+
 // -----------------------------------------------
 // 3. DUAL THEME SWITCHER LOGIC
 // -----------------------------------------------
